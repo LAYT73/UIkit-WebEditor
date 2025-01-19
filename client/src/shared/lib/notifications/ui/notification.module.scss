@@ -1,0 +1,65 @@
+.notification {
+  background-color: #0D0F10;
+  color: #fff;
+  width: max-content;
+  max-width: 25vw;
+  padding: 16px;
+  border-radius: 4px;
+  margin: 8px 0;
+  box-shadow: 0 0 20px 5px rgba(255, 255, 255, 0.02);
+  display: flex;
+  align-items: center;
+}
+
+.notificationIcon {
+  margin-right: 16px;
+}
+
+.notificationType {
+  margin-right: 8px;
+
+  &.warning {
+    color: #E26F20;
+  }
+
+  &.error {
+    color: #D0302F;
+  }
+
+  &.success {
+    color: #4AC97E;
+  }
+
+  &.info {
+    color: #4D62E5;
+  }
+}
+
+.notification-enter {
+  opacity: 0;
+  transform: translateY(-20px);
+}
+
+.notification-enter-active {
+  opacity: 1;
+  transform: translateY(0);
+  transition: opacity 300ms, transform 300ms;
+}
+
+.notification-exit {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.notification-exit-active {
+  opacity: 0;
+  transform: translateY(-20px);
+  transition: opacity 300ms, transform 300ms;
+}
+
+.container {
+  position: fixed;
+  top: 20px;
+  left: 50%;
+  transform: translate(-50%, 0);
+}

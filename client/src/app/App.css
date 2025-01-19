@@ -1,0 +1,77 @@
+@import url('https://fonts.googleapis.com/css2?family=Jost:ital,wght@0,100..900;1,100..900&display=swap');
+
+:root {
+  font-family: "Jost", Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+  line-height: 1.5;
+  font-weight: 400;
+
+  /*
+  * Basic color variables
+  */
+  --color-white: #ffffff;
+  --color-black: #000000;
+  --color-primary: #6E00FF;
+  --color-dark: #202329;
+
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+* {
+  font-family: "Jost", Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+}
+
+a {
+  position: relative;
+  font-weight: 500;
+  text-decoration: none;
+  color: var(--color-white);
+  background: -webkit-linear-gradient(45deg, #82DBF7, #B6F09C);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  transition: all 5s;
+}
+
+
+a::before {
+  content: '';
+  position:absolute;
+  width: 100%;
+  height: 2px;
+  border-radius: 4px;
+  background: -webkit-linear-gradient(45deg, #82DBF7, #B6F09C);
+  bottom: -4px;
+  left: 0;
+  transform-origin: right;
+  transform: scaleX(0);
+  transition: transform .3s ease-in-out;
+}
+
+a:hover::before {
+  transform-origin: left;
+  transform: scaleX(1);
+}
+
+a:focus {
+  border: none;
+  outline: none;
+}
+
+a:focus::before {
+  transform-origin: left;
+  transform: scaleX(1);
+}
+
+
+body {
+  background-color: var(--color-black);
+  color: var(--color-white);
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}

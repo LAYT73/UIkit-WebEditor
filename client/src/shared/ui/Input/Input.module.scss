@@ -1,0 +1,107 @@
+.inputContainer {
+  display: flex;
+  align-items: center;
+  border: 1px solid transparent;
+  border-radius: 8px;
+  padding: 12px;
+  margin: 4px;
+  height: 48px;
+  background-color: #1a1d21;
+  background-clip: padding-box;
+  position: relative;
+  z-index: -0;
+
+  &::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    z-index: -1;
+    margin: 1px;
+    border-radius: inherit;
+    background: #1a1d21;
+  }
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    z-index: -1;
+    margin: -1px;
+    border-radius: inherit;
+    background: #363A3D;
+  }
+
+  &.focused::before {
+    background: linear-gradient(to right, #82DBF7, #B6F09C);
+    outline: 4px solid #2E464E;
+  }
+}
+
+.icon {
+  margin-right: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.input {
+  flex: 1;
+  border: none;
+  outline: none;
+  padding: 0.5rem 0;
+  background-color: #1a1d21;
+  color: white;
+}
+
+// Стили для автозаполнения инпутов
+.input:-webkit-autofill {
+  background-color: #1a1d21;
+  color: #fff;
+  -webkit-box-shadow: 0 0 0 1000px #1a1d21 inset;
+  box-shadow: 0 0 0 1000px #1a1d21 inset;
+  transition: background-color 5000s ease-in-out 0s; /* Предотвращает мерцание */
+}
+
+.input:-webkit-autofill:focus {
+  background-color: #1a1d21;
+  color: #fff;
+  -webkit-box-shadow: 0 0 0 1000px #1a1d21 inset;
+  box-shadow: 0 0 0 1000px #1a1d21 inset;
+}
+
+.input:-webkit-autofill::first-line {
+  background-color: #1a1d21;
+  color: #fff;
+}
+
+.input:-webkit-autofill{
+  -webkit-text-fill-color: white !important;
+}
+
+.hint {
+  display: flex;
+  margin: 12px 0 12px 4px;
+}
+
+.hintIcon {
+
+}
+
+.hintText {
+  font-size: 14px;
+  margin-left: 8px;
+  color: #686B6E;
+}
+
+.label {
+  color: #9B9C9E;
+  margin-left: 4px;
+  margin-bottom: 16px;
+  font-size: 14px;
+}

@@ -1,0 +1,23 @@
+{
+  "files": [],
+  "compilerOptions": {
+    "esModuleInterop": true,
+    "jsx": "react-jsx",
+    "baseUrl": "./",
+    "paths": {
+      "@/*": ["./src/*"]
+    },
+    "types": ["@testing-library/jest-dom"],
+    "allowSyntheticDefaultImports": true,
+    "declaration": false,
+    "moduleResolution": "node",
+  },
+  "references": [
+    {
+      "path": "./tsconfig.app.json"
+    },
+    {
+      "path": "./tsconfig.node.json"
+    }
+  ]
+}

@@ -1,5 +1,4 @@
 import React, { useRef, useState } from 'react';
-import { useDrop } from 'react-dnd';
 import styles from './Canvas.module.scss';
 
 interface CanvasProps {
@@ -31,24 +30,8 @@ export const Canvas: React.FC<CanvasProps> = ({
     y: number;
   } | null>(null);
 
-  const [, dropRef] = useDrop({
-    accept: 'BUTTON',
-    drop: (item: any, monitor) => {
-      const offset = monitor.getClientOffset();
-      if (offset && canvasRef.current) {
-        const canvas = canvasRef.current.getBoundingClientRect();
-        const position = {
-          x: offset.x - canvas.left - canvasOffset.x,
-          y: offset.y - canvas.top - canvasOffset.y,
-        };
-        onDrop(item.id || null, position);
-      }
-    },
-  });
-
   const combinedRef = (node: HTMLDivElement | null) => {
     canvasRef.current = node;
-    dropRef(node);
   };
 
   const handleMouseDown = (e: React.MouseEvent) => {
@@ -71,7 +54,6 @@ export const Canvas: React.FC<CanvasProps> = ({
       }));
       setLastMousePosition({ x: e.clientX, y: e.clientY });
     }
-
     if (isDragging && draggedElementId && draggedElementOffset) {
       const canvas = canvasRef.current?.getBoundingClientRect();
       if (canvas) {
@@ -79,18 +61,13 @@ export const Canvas: React.FC<CanvasProps> = ({
           x: e.clientX - canvas.left - canvasOffset.x - draggedElementOffset.x,
           y: e.clientY - canvas.top - canvasOffset.y - draggedElementOffset.y,
         };
+
         onElementMove(draggedElementId, position);
       }
     }
   };
 
   const handleMouseUp = () => {
-    // Сброс всех состояний драгинга и панорамирования
-    if (isDragging) {
-      setIsDragging(false);
-      setDraggedElementId(null);
-      setDraggedElementOffset(null);
-    }
     setIsPanning(false);
     setLastMousePosition(null);
   };
@@ -105,15 +82,27 @@ export const Canvas: React.FC<CanvasProps> = ({
       x: e.clientX - element.left,
       y: e.clientY - element.top,
     };
+
     setDraggedElementOffset(offset);
   };
 
   const handleElementMouseUp = (e: React.MouseEvent) => {
     e.stopPropagation();
-    if (isDragging) {
-      setIsDragging(false);
-      setDraggedElementId(null);
-      setDraggedElementOffset(null);
+    setIsDragging(false);
+    setDraggedElementId(null);
+    setDraggedElementOffset(null);
+  };
+
+  const handleDrop = (e: React.DragEvent) => {
+    e.preventDefault();
+    const id = e.dataTransfer.getData('text');
+    const canvas = canvasRef.current?.getBoundingClientRect();
+    if (canvas) {
+      const position = {
+        x: e.clientX - canvas.left - canvasOffset.x,
+        y: e.clientY - canvas.top - canvasOffset.y,
+      };
+      onDrop(id, position);
     }
   };
 
@@ -125,6 +114,8 @@ export const Canvas: React.FC<CanvasProps> = ({
       onMouseMove={handleMouseMove}
       onMouseUp={handleMouseUp}
       onMouseLeave={handleMouseUp}
+      onDrop={handleDrop}
+      onDragOver={(e) => e.preventDefault()}
     >
       <div
         className={styles.canvasContent}
@@ -141,9 +132,8 @@ export const Canvas: React.FC<CanvasProps> = ({
               top: position.y,
               position: 'absolute',
             }}
+            onMouseUp={(e) => handleElementMouseUp(e)}
             onMouseDown={(e) => handleElementMouseDown(id, e)}
-            onMouseUp={handleElementMouseUp}
-            onMouseLeave={handleElementMouseUp}
           >
             {component}
           </div>

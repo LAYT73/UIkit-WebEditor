@@ -9,17 +9,17 @@
     &:active {
       cursor: grabbing;
     }
-}
+  }
 
-.canvasContent {
+  .canvasContent {
     position: absolute;
     top: 0;
     left: 0;
     width: 10000px;
     height: 10000px;
-}
+  }
 
-.element {
+  .element {
     background-color: #007bff;
     color: white;
     display: flex;
@@ -27,4 +27,4 @@
     align-items: center;
     border-radius: 4px;
     user-select: none;
-}
+  }

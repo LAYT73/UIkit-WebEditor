@@ -1,8 +1,6 @@
 import React, { useState } from 'react';
 import { Canvas } from '@/widgets/Canvas/Canvas';
 import { DraggableButton } from '@/entities/Button/DraggableButton';
-import { DndProvider } from 'react-dnd';
-import { HTML5Backend } from 'react-dnd-html5-backend';
 import styles from './App.module.scss';
 
 export const App: React.FC = () => {
@@ -18,7 +16,7 @@ export const App: React.FC = () => {
     id: string | null,
     position: { x: number; y: number },
   ) => {
-    if (!id) {
+    if (id == 'dragStart') {
       const newElement = {
         id: `element-${elements.length + 1}`,
         component: (
@@ -42,23 +40,31 @@ export const App: React.FC = () => {
     );
   };
 
+  const handleDragStart = (e: React.DragEvent, id: string) => {
+    console.log(`dragStart`, e.target);
+    e.dataTransfer.setData('text', id);
+  };
+
   return (
-    <DndProvider backend={HTML5Backend}>
-      <div className={styles.app}>
-        <div className={styles.sidebar}>
-          <h3>Toolbox</h3>
-          <div className={styles.toolbox}>
-            <DraggableButton text="Drag me" id={null} />
-          </div>
-        </div>
-        <div className={styles.canvasContainer}>
-          <Canvas
-            elements={elements}
-            onDrop={handleDrop}
-            onElementMove={handleElementMove}
+    <div className={styles.app}>
+      <div className={styles.sidebar}>
+        <h3>Toolbox</h3>
+        <div className={styles.toolbox}>
+          <DraggableButton
+            text="Drag me"
+            id="drag-button"
+            draggable
+            onDragStart={(e) => handleDragStart(e, 'dragStart')}
           />
         </div>
       </div>
-    </DndProvider>
+      <div className={styles.canvasContainer}>
+        <Canvas
+          elements={elements}
+          onDrop={handleDrop}
+          onElementMove={handleElementMove}
+        />
+      </div>
+    </div>
   );
 };

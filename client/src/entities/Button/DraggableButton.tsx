@@ -1,23 +1,26 @@
 import React from 'react';
-import { useDrag } from 'react-dnd';
 import styles from './Button.module.scss';
 
 interface DraggableButtonProps {
   text: string;
   id: string | null;
+  draggable?: boolean;
+  onDragStart?: (e: React.DragEvent) => void;
 }
 
 export const DraggableButton: React.FC<DraggableButtonProps> = ({
   text,
   id,
+  draggable,
+  onDragStart,
 }) => {
-  const [, dragRef] = useDrag({
-    type: 'BUTTON',
-    item: { id },
-  });
-
   return (
-    <button ref={dragRef} className={styles.draggableButton}>
+    <button
+      id={id ? id : undefined}
+      draggable={draggable}
+      onDragStart={onDragStart}
+      className={styles.draggableButton}
+    >
       {text}
     </button>
   );

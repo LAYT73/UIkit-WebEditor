@@ -1,0 +1,27 @@
+.app {
+    display: flex;
+    height: 100vh;
+  }
+
+  .sidebar {
+    width: 200px;
+    padding: 16px;
+    background-color: #f8f9fa;
+    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .toolbox {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .canvasContainer {
+    flex: 1;
+    position: relative;
+    overflow: hidden;
+    background-color: #ffffff;
+  }

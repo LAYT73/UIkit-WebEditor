@@ -11,6 +11,8 @@ interface CanvasProps {
   onElementMove: (id: string, position: { x: number; y: number }) => void;
 }
 
+const SNAP_THRESHOLD = 10;
+
 export const Canvas: React.FC<CanvasProps> = ({
   onDrop,
   elements,
@@ -66,116 +68,89 @@ export const Canvas: React.FC<CanvasProps> = ({
     if (isDragging && draggedElementId && draggedElementOffset) {
       const canvas = canvasRef.current?.getBoundingClientRect();
       if (canvas) {
-        let position = {
+        const position = {
           x: e.clientX - canvas.left - canvasOffset.x - draggedElementOffset.x,
           y: e.clientY - canvas.top - canvasOffset.y - draggedElementOffset.y,
         };
-        const snapThreshold = 20;
-        let closestElement = null;
-        let minDistance = Infinity;
-        const newMagneticLines: {
-          x: number;
-          y: number;
-          type: 'vertical' | 'horizontal';
-        }[] = [];
+
+        const newMagneticLines = [];
+        const closestPosition = { ...position };
+
         const draggedElement = document.getElementById(draggedElementId);
-        // let elementWidth = 0;
-        // let elementHeight = 0;
+        let draggedWidth = 0;
+        let draggedHeight = 0;
         let elementRect = null;
         if (draggedElement) {
           elementRect = draggedElement.getBoundingClientRect();
-          //   elementWidth = elementRect.width;
-          //   elementHeight = elementRect.height;
+          draggedWidth = elementRect.width;
+          draggedHeight = elementRect.height;
         }
-        for (const element of elements) {
-          if (element.id !== draggedElementId && elementRect) {
-            const domElement = document.getElementById(element.id);
-            let width = 0;
-            // let height = 0;
-            if (domElement) {
-              const rect = domElement.getBoundingClientRect();
-              width = rect.width;
-              //   height = rect.height;
-            }
-            const distanceY = Math.abs(position.y - element.position.y);
-            if (distanceY < snapThreshold + 6 && distanceY < minDistance) {
+
+        elements.forEach((element) => {
+          if (element.id === draggedElementId) return;
+          const domElement = document.getElementById(element.id);
+          let width = 0;
+          let height = 0;
+          if (domElement) {
+            const rect = domElement.getBoundingClientRect();
+            width = rect.width;
+            height = rect.height;
+          }
+          const { x: targetX, y: targetY } = element.position;
+          const targetWidth = width;
+          const targetHeight = height;
+
+          // Проверяем все возможные привязки
+          const snapX = [
+            targetX, // левый край элемента
+            targetX + targetWidth, // правый край элемента
+            targetX - draggedWidth, // правый край dragged к левому target
+            targetX + targetWidth - draggedWidth, // левый край dragged к правому target
+          ];
+
+          const snapY = [
+            targetY, // верхний край элемента
+            targetY + targetHeight, // нижний край элемента
+            targetY - draggedHeight, // нижний край dragged к верхнему target
+            targetY + targetHeight - draggedHeight, // верхний край dragged к нижнему target
+          ];
+
+          snapX.forEach((snap, i) => {
+            if (Math.abs(position.x - snap) < SNAP_THRESHOLD) {
+              closestPosition.x = snap;
+
               newMagneticLines.push({
-                x: elementRect.x,
-                y: element.position.y,
+                x:
+                  i == 2
+                    ? snap + draggedWidth
+                    : i == 3
+                      ? snap + draggedWidth
+                      : snap,
+                y: position.y,
+                type: 'vertical',
+              });
+            }
+          });
+
+          snapY.forEach((snap, i) => {
+            if (Math.abs(position.y - snap) < SNAP_THRESHOLD) {
+              closestPosition.y = snap;
+              newMagneticLines.push({
+                x: position.x,
+                y:
+                  i == 2
+                    ? snap + draggedHeight
+                    : i == 3
+                      ? snap + draggedHeight
+                      : snap,
                 type: 'horizontal',
               });
-              minDistance = distanceY;
-              closestElement = {
-                ...element,
-                axis: 'y',
-                snapPosition: element.position.y,
-              };
             }
+          });
+        });
 
-            const distanceXLeftLeft = Math.abs(position.x - element.position.x);
-            const distanceXLeftRight = Math.abs(
-              position.x - (element.position.x + width),
-            );
-            if (
-              distanceXLeftLeft < snapThreshold + 12 &&
-              distanceXLeftLeft < minDistance
-            ) {
-              newMagneticLines.push({
-                x: element.position.x,
-                y: elementRect.y,
-                type: 'vertical',
-              });
-              minDistance = distanceXLeftLeft;
-              closestElement = {
-                ...element,
-                axis: 'x',
-                snapPosition: element.position.x,
-              };
-            } else if (
-              distanceXLeftRight < snapThreshold + 12 &&
-              distanceXLeftRight < minDistance
-            ) {
-              newMagneticLines.push({
-                x: element.position.x + width,
-                y: elementRect.y,
-                type: 'vertical',
-              });
-              minDistance = distanceXLeftRight;
-              closestElement = {
-                ...element,
-                axis: 'x',
-                snapPosition: element.position.x + width,
-              };
-            }
-          }
-        }
-
-        if (closestElement) {
-          position = {
-            x:
-              closestElement.axis === 'x'
-                ? closestElement.snapPosition
-                : position.x,
-            y:
-              closestElement.axis === 'y'
-                ? closestElement.snapPosition
-                : position.y,
-          };
-        }
-
-        if (
-          newMagneticLines.length == 2 &&
-          newMagneticLines.filter((el) => el.type === 'vertical')[0] &&
-          newMagneticLines.filter((el) => el.type === 'horizontal')[0]
-        ) {
-          position = {
-            x: newMagneticLines.filter((el) => el.type === 'vertical')[0].x,
-            y: newMagneticLines.filter((el) => el.type === 'horizontal')[0].y,
-          };
-        }
-
-        setMagneticLines(newMagneticLines.length > 0 ? newMagneticLines : null);
-        onElementMove(draggedElementId, position);
+        setMagneticLines(newMagneticLines);
+        onElementMove(draggedElementId, closestPosition);
       }
     }
   };
@@ -263,7 +238,7 @@ export const Canvas: React.FC<CanvasProps> = ({
                 top: line.type === 'horizontal' ? line.y : line.y - 1080,
                 width: line.type === 'vertical' ? '1px' : '100%',
                 height: line.type === 'horizontal' ? '1px' : '100%',
-                backgroundColor: 'rgba(111, 0, 255, 0.5)',
+                backgroundColor: 'rgba(76, 0, 255, 0.99)',
                 zIndex: -10,
               }}
             ></div>

@@ -7,26 +7,26 @@ import { RouteProps } from '@/app/routing/Route.types.ts';
 import { RootState } from '../store/store';
 
 export const Route: React.FC<RouteProps> = ({
-  element,
-  isPrivate,
-  redirectPath,
+    element,
+    isPrivate,
+    redirectPath,
 }) => {
-  const isAuthenticated = useSelector(
-    (state: RootState) => state.user.isAuthenticated,
-  );
-  const navigate = useNavigate();
+    const isAuthenticated = useSelector(
+        (state: RootState) => state.user.isAuthenticated,
+    );
+    const navigate = useNavigate();
 
-  useEffect(() => {
-    if (isPrivate && !isAuthenticated) {
-      navigate(redirectPath);
-    } else if (!isPrivate && isAuthenticated) {
-      navigate(redirectPath);
+    useEffect(() => {
+        if (isPrivate && !isAuthenticated) {
+            navigate(redirectPath);
+        } else if (!isPrivate && isAuthenticated) {
+            navigate(redirectPath);
+        }
+    }, [isAuthenticated, isPrivate, navigate, redirectPath]);
+
+    if ((isPrivate && isAuthenticated) || (!isPrivate && !isAuthenticated)) {
+        return element;
     }
-  }, [isAuthenticated, isPrivate, navigate, redirectPath]);
 
-  if ((isPrivate && isAuthenticated) || (!isPrivate && !isAuthenticated)) {
-    return element;
-  }
-
-  return null;
+    return null;
 };

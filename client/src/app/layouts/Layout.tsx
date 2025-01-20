@@ -8,20 +8,20 @@ import { RootState } from '@/app/store/store';
 import styles from './Layout.module.scss';
 
 export const Layout: React.FC = () => {
-  const isAuthenticated: boolean = useSelector(
-    (state: RootState) => state.user.isAuthenticated,
-  );
-
-  if (isAuthenticated) {
-    return (
-      <div className={styles.layout}>
-        {/* <Aside /> */}
-        <main className={styles.main_content}>
-          {/* <Header /> */}
-          <Outlet />
-        </main>
-      </div>
+    const isAuthenticated: boolean = useSelector(
+        (state: RootState) => state.user.isAuthenticated,
     );
-  }
-  return <Outlet />;
+
+    if (isAuthenticated) {
+        return (
+            <div className={styles.layout}>
+                {/* <Aside /> */}
+                <main className={styles.main_content}>
+                    {/* <Header /> */}
+                    <Outlet />
+                </main>
+            </div>
+        );
+    }
+    return <Outlet />;
 };

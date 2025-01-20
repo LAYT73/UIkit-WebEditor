@@ -1,5 +1,5 @@
 export interface UseLogoutReturn {
-  logout: () => Promise<void>;
-  loading: boolean;
-  error: string | null;
+    logout: () => Promise<void>;
+    loading: boolean;
+    error: string | null;
 }

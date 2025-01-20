@@ -1,0 +1,62 @@
+.sidebar {
+    padding: 16px;
+    background-color: #2C2C2C;
+    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+    display: flex;
+    color: #fff;
+    flex-direction: column;
+    gap: 16px;
+    width: 200px;
+    border-right: 1px solid #6e6e6e52;
+
+    h3 {
+        font-size: 18px;
+        font-weight: 500;
+    }
+
+    hr {
+        width: calc(100% + 32px);
+        border: none;
+        position: relative;
+        left: -16px;
+        border-top: 1px solid #6e6e6e52;
+    }
+
+    h4 {
+        font-size: 12px;
+        margin-bottom: 12px;
+        font-weight: 500;
+
+    }
+
+    .toolbox {
+        flex-direction: column;
+        gap: 8px;
+        display: flex;
+        height: 40vh;
+        overflow-y: auto;
+
+        button {
+            min-height: 32px;
+            min-width: auto;
+            padding: 0 20px;
+            font-size: 16px;
+            border: none;
+            text-align: left;
+            border-radius: 4px;
+            color: white;
+            background-color: #37373734;
+            cursor: grab;
+            transition: all 0.2s ease;
+            outline: 0px dashed #ffffff00;
+            margin-right: 8px;
+
+            &:hover {
+                background-color: #373737;
+                z-index: 100;
+            }
+        }
+
+
+    }
+}

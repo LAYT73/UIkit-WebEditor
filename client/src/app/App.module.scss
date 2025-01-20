@@ -9,37 +9,41 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
-* {
-  font-family: "Jost", Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
-  margin: 0;
-  padding: 0;
-}
+
 
 .app {
   height: 100vh;
   display: flex;
 }
 
-.sidebar {
-  padding: 16px;
-  background-color: #161616;
-  box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
-  display: flex;
-  color: #fff;
-  flex-direction: column;
-  gap: 16px;
-  width: 200px;
-}
-
-.toolbox {
-  flex-direction: column;
-  gap: 8px;
-  display: flex;
-}
 
 .canvasContainer {
   position: relative;
   overflow: hidden;
   background-color: #ffffff;
   flex: 1;
+}
+
+* {
+  font-family: "Jost", Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+}
+
+*::-webkit-scrollbar {
+  width: 6px;
+}
+
+*::-webkit-scrollbar-track {
+  background: var(--color-background);
+  border-radius: 6px;
+}
+
+*::-webkit-scrollbar-thumb {
+  background: #73737379;
+  border-radius: 10px;
+}
+
+*::-webkit-scrollbar-thumb:hover {
+  background: #737373;
 }

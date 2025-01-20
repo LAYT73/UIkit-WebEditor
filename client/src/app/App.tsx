@@ -41,7 +41,6 @@ export const App: React.FC = () => {
   };
 
   const handleDragStart = (e: React.DragEvent, id: string) => {
-    console.log(`dragStart`, e.target);
     e.dataTransfer.setData('text', id);
   };
 

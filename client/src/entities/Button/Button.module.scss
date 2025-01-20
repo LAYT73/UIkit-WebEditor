@@ -8,9 +8,9 @@
     color: white;
     cursor: grab;
     transition: all 0.2s ease;
-    outline: 3px dashed #ffffff;
+    outline: 0px dashed #ffffff;
 
     &:hover {
-        outline: 3px dashed #a200ff;
+        outline: 1px dashed #a200ff;
     }
 }

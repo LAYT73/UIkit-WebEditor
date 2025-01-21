@@ -242,7 +242,7 @@ export const Canvas: React.FC<ICanvasProps> = ({
                                     line.type === 'vertical' ? '1px' : '100%',
                                 height:
                                     line.type === 'horizontal' ? '1px' : '100%',
-                                backgroundColor: 'rgba(76, 0, 255, 0.99)',
+                                backgroundColor: 'rgba(135, 0, 197, 0.99)',
                                 zIndex: -10,
                             }}
                         ></div>

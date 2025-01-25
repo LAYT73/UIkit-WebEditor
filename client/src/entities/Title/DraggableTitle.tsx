@@ -1,5 +1,6 @@
-import React, { useRef, useState, useEffect } from 'react';
+import React from 'react';
 import styles from './DraggableTitle.module.scss';
+import { DraggableComponent } from '@/shared/ui';
 
 interface DraggableTitleProps {
     text: string;
@@ -15,37 +16,26 @@ interface DraggableTitleProps {
 export const DraggableTitle: React.FC<DraggableTitleProps> = ({
     text,
     id,
-    draggable,
-    onDragStart,
+    draggable = true,
     size,
+    onDragStart,
 }) => {
-    const ref = useRef<HTMLHeadingElement>(null);
-    const [dimensions, setDimensions] = useState({ width: 0, height: 0 });
-    useEffect(() => {
-        if (ref.current) {
-            const { width, height } = ref.current.getBoundingClientRect();
-            setDimensions({ width, height });
-        }
-    }, []);
     return (
-        <div className={styles.container}>
-            <h1
-                ref={ref}
-                id={id ? id : undefined}
-                draggable={draggable}
-                onDragStart={onDragStart}
-                className={styles.draggableTitle}
-                style={{ width: size?.width, height: size?.height }}
-            >
-                {text}
-            </h1>
-            {!draggable && (
-                <div className={styles.draggableTitle_size}>
-                    <h6>
-                        {dimensions.width.toFixed(2)} x {dimensions.height}
-                    </h6>
-                </div>
+        <DraggableComponent
+            draggable={draggable}
+            size={size}
+            renderContent={(ref, style) => (
+                <h1
+                    ref={ref as React.RefObject<HTMLHeadingElement>}
+                    id={id ? id : undefined}
+                    draggable={draggable}
+                    onDragStart={onDragStart}
+                    className={styles.draggableTitle}
+                    style={style}
+                >
+                    {text}
+                </h1>
             )}
-        </div>
+        />
     );
 };

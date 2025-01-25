@@ -11,3 +11,4 @@ export { default as BlockContainer } from './BlockContainer';
 export { default as ModalConfirm } from './ModalConfirm';
 export { default as Card } from './Card';
 export { default as CustomSelect } from './CustomSelect';
+export { default as DraggableComponent } from './DraggableComponent';

@@ -1,41 +1,21 @@
-.container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 8px;
+.draggableTitle {
+    min-width: auto;
+    font-size: 16px;
+    border: none;
+    border-radius: 4px;
+    background-color: #00000000;
+    color: white;
+    cursor: grab;
+    transition: all 0.2s ease;
+    outline: 0px dashed #ffffff00;
+    padding: 10px 20px;
 
-    .draggableTitle {
-        padding: 10px 20px;
-        min-width: auto;
-        font-size: 16px;
-        border: none;
-        border-radius: 4px;
-        background-color: #00000000;
-        color: white;
-        cursor: grab;
-        transition: all 0.2s ease;
-        outline: 0px dashed #ffffff00;
-
-        &:hover {
-            outline: 1px dashed #a200ff;
-            z-index: 100;
-        }
-
-        &:hover + .draggableTitle_size {
-            display: flex;
-        }
+    &:hover {
+        z-index: 100;
+        outline: 1px dashed #a200ff;
     }
 
-    .draggableTitle_size {
-        background-color: rgb(51, 51, 51);
-        padding: 4px;
-        display: none;
-        border-radius: 4px;
-        height: max-content;
-        width: max-content;
-        justify-content: center;
-        align-items: center;
-        transition: all .2s;
-        z-index: 100;
+    &:hover + .draggableTitle_size {
+        display: flex;
     }
 }

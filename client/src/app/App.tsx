@@ -1,54 +1,56 @@
 import React, { useState } from 'react';
 import { Canvas } from '@/widgets/Canvas/Canvas';
 import { DraggableButton } from '@/entities/Button/DraggableButton';
+import { DraggableTitle } from '@/entities/Title/DraggableTitle';
 import styles from './App.module.scss';
 import { Aside } from '@/widgets/Aside/Aside';
-import { DraggableTitle } from '@/entities/Title/DraggableTitle';
+import { Position } from '@/widgets/Canvas/types/Position.types';
+
+interface Element {
+    id: string;
+    component: React.ReactNode;
+    position: Position;
+}
+
+const elementFactory = {
+    dragStartButton: (id: string, index: number): JSX.Element => (
+        <DraggableButton text={`Button ${index}`} id={id} />
+    ),
+    dragStartTitle: (id: string, index: number): JSX.Element => (
+        <DraggableTitle text={`Title ${index}`} id={id} />
+    ),
+};
 
 export const App: React.FC = () => {
-    const [elements, setElements] = useState<
-        {
-            id: string;
-            component: React.ReactNode;
-            position: { x: number; y: number };
-        }[]
-    >([]);
+    const [elements, setElements] = useState<Element[]>([]);
 
-    const handleDrop = (
+    const createNewElement = (
         id: string | null,
-        position: { x: number; y: number },
-    ) => {
-        if (id == 'dragStartButton') {
-            const newElement = {
-                id: `element-${elements.length + 1}`,
-                component: (
-                    <DraggableButton
-                        text={`Button ${elements.length + 1}`}
-                        id={`element-${elements.length + 1}`}
-                    />
-                ),
-                position,
-            };
-            setElements((prev) => [...prev, newElement]);
-        } else if (id == 'dragStartTitle') {
-            const newElement = {
-                id: `element-${elements.length + 1}`,
-                component: (
-                    <DraggableTitle
-                        text={`Title ${elements.length + 1}`}
-                        id={`element-${elements.length + 1}`}
-                    />
-                ),
-                position,
-            };
+        position: Position,
+    ): Element | null => {
+        if (!id || !(id in elementFactory)) return null;
+
+        const newId = `element-${elements.length + 1}`;
+        const newComponent = elementFactory[id as keyof typeof elementFactory](
+            newId,
+            elements.length + 1,
+        );
+
+        return {
+            id: newId,
+            component: newComponent,
+            position,
+        };
+    };
+
+    const handleDrop = (id: string | null, position: Position) => {
+        const newElement = createNewElement(id, position);
+        if (newElement) {
             setElements((prev) => [...prev, newElement]);
         }
     };
 
-    const handleElementMove = (
-        id: string,
-        position: { x: number; y: number },
-    ) => {
+    const handleElementMove = (id: string, position: Position) => {
         setElements((prev) =>
             prev.map((el) => (el.id === id ? { ...el, position } : el)),
         );
